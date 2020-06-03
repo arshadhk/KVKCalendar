@@ -7,6 +7,19 @@
 
 import Foundation
 
+
+class MonthDetails:NSObject{
+    var name: String = String()
+    var date: Date = Date()
+    var days: [Day] = [Day]()
+    
+    init(name:String,date:Date,days:[Day]) {
+        self.name = name
+        self.date = date
+        self.days = days
+    }
+}
+
 struct YearData {
     private let style: Style
     
@@ -14,56 +27,106 @@ struct YearData {
     var months = [Month]()
     var date: Date
     
-    init(date: Date, years: Int, style: Style) {
+    init(dates: [Date], years: Int, style: Style) {
         self.style = style
-        self.date = date
-        // count years for calendar
-        let indexsYear = [Int](repeating: 0, count: years).split(half: years / 2)
-        let lastYear = indexsYear.left
-        let nextYear = indexsYear.right
+        self.date = dates.first!
         
-        var yearsCount = [Int]()
+        let monthFormatter = DateFormatter()
+        monthFormatter.locale = style.locale
+        let nameMonths = (monthFormatter.standaloneMonthSymbols ?? [""]).map({ $0.capitalized })
+
         
-        // last years
-        for lastIdx in lastYear.indices.reversed() {
-            yearsCount.append(-lastIdx)
-        }
-        
-        // next years
-        for nextIdx in nextYear.indices {
-            yearsCount.append(nextIdx + 1)
-        }
-        
-        let formatter = DateFormatter()
-        formatter.locale = style.locale
-        let nameMonths = (formatter.standaloneMonthSymbols ?? [""]).map({ $0.capitalized })
-        
-        let calendar = style.calendar
-        var monthsTemp = [Month]()
-        
-        yearsCount.forEach { (idx) in
-            let yearDate = calendar.date(byAdding: .year, value: idx, to: date)
-            let monthsOfYearRange = calendar.range(of: .month, in: .year, for: yearDate ?? date)
-            
-            var dateMonths = [Date]()
-            if let monthsOfYearRange = monthsOfYearRange {
-                let year = calendar.component(.year, from: yearDate ?? date)
-                dateMonths = Array(monthsOfYearRange.lowerBound..<monthsOfYearRange.upperBound).compactMap({ monthOfYear -> Date? in
-                    var components = DateComponents(year: year, month: monthOfYear)
-                    components.day = 2
-                    return calendar.date(from: components)
-                })
+        //My Logic
+        let formatterDay = DateFormatter()
+        formatterDay.dateFormat = "EE"
+        formatterDay.locale = Locale(identifier: "en_US")
+
+
+        var months = [Month]()
+        var allMonths = [MonthDetails]()
+
+        for aDate in dates{
+            let monthName = nameMonths[aDate.month - 1]
+            let currentDate = Day(type: DayType(rawValue: formatterDay.string(from: aDate).uppercased()), date: aDate, data: [])
+            if let month = allMonths.first(where: {$0.name == monthName}){
+                month.days.append(currentDate)
+            }else{
+                let month = MonthDetails(name: monthName, date: aDate, days: [currentDate])
+                allMonths.append(month)
             }
-            
-            var months = zip(nameMonths, dateMonths).map({ Month(name: $0.0, date: $0.1, days: []) })
-            
-            for (idx, month) in months.enumerated() {
-                let days = getDaysInMonth(month: idx + 1, date: month.date)
-                months[idx].days = days
-            }
-            monthsTemp += months
         }
-        self.months = monthsTemp
+
+        for aMonth in allMonths{
+            months.append(Month(name: aMonth.name, date: aMonth.date, days: aMonth.days))
+        }
+
+        self.months = months
+        
+        // Default calculation
+//        let indexsYear = [Int](repeating: 0, count: years).split(half: years / 2)
+//        let lastYear = indexsYear.left
+//        let nextYear = indexsYear.right
+//
+//        var yearsCount = [Int]()
+//
+//        // last years
+//        for lastIdx in lastYear.indices.reversed() {
+//            yearsCount.append(-lastIdx)
+//        }
+//
+//        // next years
+//        for nextIdx in nextYear.indices {
+//            yearsCount.append(nextIdx + 1)
+//        }
+//
+//        let calendar = style.calendar
+//        var monthsTemp = [Month]()
+//
+//        yearsCount.forEach { (idx) in
+//            let yearDate = calendar.date(byAdding: .year, value: idx, to: date)
+//            let monthsOfYearRange = calendar.range(of: .month, in: .year, for: yearDate ?? date)
+//
+//            var dateMonths = [Date]()
+//            if let monthsOfYearRange = monthsOfYearRange {
+//                let year = calendar.component(.year, from: yearDate ?? date)
+//                dateMonths = Array(monthsOfYearRange.lowerBound..<monthsOfYearRange.upperBound).compactMap({ monthOfYear -> Date? in
+//                    var components = DateComponents(year: year, month: monthOfYear)
+//                    components.day = 2
+//                    return calendar.date(from: components)
+//                })
+//            }
+//
+//            let months = zip(nameMonths, dateMonths).map({ Month(name: $0.0, date: $0.1, days: []) })
+//
+//            for (idx, month) in months.enumerated() {
+//                let days = getDaysInMonth(month: idx + 1, date: month.date)
+//
+////                var all = [Day]()
+////
+////                for aDay in days{
+////                    if dates.contains(where: {$0.beginningOfDay() == aDay.date?.beginningOfDay()}){
+////                        all.append(aDay)
+////                    }
+////                }
+//
+//                months[idx].days = days
+//            }
+//            monthsTemp += months
+//        }
+//
+//        var allMont = [Month]()
+//
+//        for aDate in dates{
+//            let monthName = nameMonths[aDate.month - 1]
+//            if let month = monthsTemp.first(where: {$0.name == monthName && $0.date.year == aDate.year}){
+//                if !allMont.contains(where: {$0.name == monthName}){
+//                    allMont.append(month)
+//                }
+//            }
+//        }
+//
+//
+//        self.months = allMont
     }
     
     func getDaysInMonth(month: Int, date: Date) -> [Day] {
@@ -127,10 +190,16 @@ struct YearData {
     }
 }
 
-struct Month {
-    let name: String
-    let date: Date
-    var days: [Day]
+class Month {
+    var name: String = String()
+    var date: Date = Date()
+    var days: [Day] = [Day]()
+    
+    init(name:String, date:Date, days:[Day]) {
+        self.name = name
+        self.date = date
+        self.days = days
+    }
 }
 
 struct Day {
@@ -195,3 +264,12 @@ enum DayType: String, CaseIterable {
 public enum StartDayType: Int {
     case monday, sunday
 }
+
+extension Date{
+    func beginningOfDay() -> Date? {
+        let calendar = Calendar.current
+        let components: DateComponents = calendar.dateComponents([.year, .month, .day], from: self)
+        return calendar.date(from: components)
+    }
+}
+

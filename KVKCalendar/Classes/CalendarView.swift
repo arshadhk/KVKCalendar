@@ -51,9 +51,9 @@ public final class CalendarView: UIView {
         return year
     }()
     
-    public init(frame: CGRect, date: Date = Date(), style: Style = Style(), years: Int = 4) {
+    public init(frame: CGRect, dates: [Date] = [Date](), style: Style = Style(), years: Int = 2) {
         self.style = style.checkStyle
-        self.yearData = YearData(date: date, years: years, style: style)
+        self.yearData = YearData(dates: dates, years: years, style: style)
         self.dayData = DayData(yearData: yearData, timeSystem: style.timeHourSystem, startDay: style.startWeekDay)
         self.weekData = WeekData(yearData: yearData, timeSystem: style.timeHourSystem, startDay: style.startWeekDay)
         self.monthData = MonthData(yearData: yearData, startDay: style.startWeekDay)
@@ -61,9 +61,9 @@ public final class CalendarView: UIView {
         
         if let defaultType = style.defaultType {
             type = defaultType
-            set(type: type, date: date)
+            set(type: type, date: dates.first!)
         } else {
-            set(type: type, date: date)
+            set(type: type, date: dates.first!)
         }
     }
     

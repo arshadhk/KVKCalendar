@@ -45,7 +45,7 @@ final class TimelineView: UIView, CompareEventDateProtocol {
         label.textAlignment = .center
         label.font = style.timeline.currentLineHourFont
         label.adjustsFontSizeToFitWidth = true
-        
+        label.isHidden = true
         let formatter = DateFormatter()
         formatter.dateFormat = timeHourSystem == .twentyFourHour ? "HH:mm" : "h:mm a"
         label.text = formatter.string(from: Date())
@@ -64,6 +64,7 @@ final class TimelineView: UIView, CompareEventDateProtocol {
     
     private lazy var currentLineView: UIView = {
         let view = UIView()
+        view.isHidden = true
         view.tag = tagCurrentHourLine
         view.backgroundColor = style.timeline.currentLineHourColor
         return view
@@ -362,10 +363,10 @@ final class TimelineView: UIView, CompareEventDateProtocol {
         scrollView.addSubview(currentLineView)
         movingCurrentLineHour()
         
-        if let timeNext = getTimelineLabel(hour: date.hour + 1) {
-            timeNext.isHidden = currentTimeLabel.frame.intersects(timeNext.frame)
-        }
-        time.isHidden = currentTimeLabel.frame.intersects(time.frame)
+//        if let timeNext = getTimelineLabel(hour: date.hour + 1) {
+//            timeNext.isHidden = currentTimeLabel.frame.intersects(timeNext.frame)
+//        }
+//        time.isHidden = currentTimeLabel.frame.intersects(time.frame)
     }
     
     private func calculatePointYByMinute(_ minute: Int, time: TimelineLabel) -> CGFloat {
@@ -534,7 +535,7 @@ final class TimelineView: UIView, CompareEventDateProtocol {
             }
         }
         setOffsetScrollView()
-        scrollToCurrentTime(startHour: start)
+//        scrollToCurrentTime(startHour: start)
         showCurrentLineHour()
     }
 }

@@ -206,7 +206,7 @@ extension Style {
             newStyle.headerScroll.colorBackgroundCurrentDate = .systemRed
             newStyle.headerScroll.colorBackgroundSelectDate = UIColor.useForStyle(dark: .systemGray, white: .black)
             newStyle.headerScroll.colorSelectDate = .systemGray6
-            newStyle.headerScroll.colorWeekendDate = .systemGray2
+            newStyle.headerScroll.colorWeekendDate = .black
             
             // timeline
             newStyle.timeline.backgroundColor = UIColor.useForStyle(dark: .black, white: .white)
@@ -222,8 +222,8 @@ extension Style {
             newStyle.week.colorBackgroundSelectDate = UIColor.useForStyle(dark: .systemGray, white: .black)
             newStyle.week.colorBackgroundCurrentDate = .systemRed
             newStyle.week.colorSelectDate = .white
-            newStyle.week.colorWeekendDate = .systemGray2
-            newStyle.week.colorBackgroundWeekendDate = colorBackgroundWeekendDate
+            newStyle.week.colorWeekendDate = .black
+            newStyle.week.colorBackgroundWeekendDate = .black
             
             // month
             newStyle.month.colorDate = UIColor.useForStyle(dark: .systemGray, white: .black)
@@ -232,11 +232,11 @@ extension Style {
             newStyle.month.colorBackgroundCurrentDate = .systemRed
             newStyle.month.colorBackgroundSelectDate = UIColor.useForStyle(dark: .systemGray, white: .black)
             newStyle.month.colorSelectDate = UIColor.useForStyle(dark: .black, white: .white)
-            newStyle.month.colorWeekendDate = .systemGray2
+            newStyle.month.colorWeekendDate = .black
             newStyle.month.colorMoreTitle = UIColor.useForStyle(dark: .systemGray3, white: .gray)
             newStyle.month.colorEventTitle = UIColor.useForStyle(dark: .systemGray, white: .black)
             newStyle.month.colorSeporator = UIColor.useForStyle(dark: .systemGray, white: gainsboro.withAlphaComponent(0.9))
-            newStyle.month.colorBackgroundWeekendDate = colorBackgroundWeekendDate
+            newStyle.month.colorBackgroundWeekendDate = .black
             newStyle.month.colorBackgroundDate = UIColor.useForStyle(dark: .black, white: .white)
             
             // year
@@ -244,8 +244,8 @@ extension Style {
             newStyle.year.colorBackgroundCurrentDate = .systemRed
             newStyle.year.colorBackgroundSelectDate = UIColor.useForStyle(dark: .systemGray, white: .black)
             newStyle.year.colorSelectDate = .white
-            newStyle.year.colorWeekendDate = .systemGray2
-            newStyle.year.colorBackgroundWeekendDate = colorBackgroundWeekendDate
+            newStyle.year.colorWeekendDate = .black
+            newStyle.year.colorBackgroundWeekendDate = .black
             newStyle.year.colorTitle = UIColor.useForStyle(dark: .systemGray, white: .black)
             newStyle.year.colorBackgroundHeader = UIColor.useForStyle(dark: .black, white: gainsboro.withAlphaComponent(0.4))
             newStyle.year.colorTitleHeader = UIColor.useForStyle(dark: .white, white: .black)
