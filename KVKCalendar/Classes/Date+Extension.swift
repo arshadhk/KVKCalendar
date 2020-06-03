@@ -24,6 +24,13 @@ public extension Date {
         return componet.hour ?? 0
     }
     
+    var timeHour: Int {
+        var calendar = Calendar.current
+        calendar.timeZone = TimeZone.ReferenceType.system
+        let componet = calendar.dateComponents([.hour], from: self)
+        return componet.hour ?? 0
+    }
+    
     var day: Int {
         let calendar = Calendar.current
         let componet = calendar.dateComponents([.day], from: self)

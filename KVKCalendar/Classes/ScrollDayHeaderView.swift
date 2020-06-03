@@ -90,8 +90,12 @@ final class ScrollDayHeaderView: UIView {
     
     func selectDate(offset: Int) {
         guard let nextDate = calendar.date(byAdding: .day, value: offset, to: date) else { return }
-        
-        setDate(nextDate)
+        if self.days.contains(where: {$0.date?.beginningOfDay() == nextDate.beginningOfDay()}){
+            setDate(nextDate)
+            self.date = nextDate
+        }else{
+            setDate(self.date)
+        }
     }
     
     func getDateByPointX(_ pointX: CGFloat) -> Date? {
@@ -222,7 +226,7 @@ extension ScrollDayHeaderView: CalendarSettingProtocol {
     }
     
     private func getScrollDate(_ date: Date) -> Date? {
-        return style.startWeekDay == .sunday ? date.startSundayOfWeek : date.startMondayOfWeek
+        return date
     }
     
     private func getMiddleIndexPath() -> IndexPath? {
@@ -262,28 +266,31 @@ extension ScrollDayHeaderView: UICollectionViewDelegate, UICollectionViewDelegat
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        guard var indexPath = getMiddleIndexPath(), let scrollDate = days[indexPath.row].date else { return }
-        
-        if date.isSunday {
-            switch style.startWeekDay {
-            case .monday:
-                indexPath.row += 3
-            case .sunday:
-                indexPath.row -= 3
-            }
-        } else if date.weekday > scrollDate.weekday {
-            indexPath.row += date.weekday - scrollDate.weekday
-        } else if scrollDate.weekday > date.weekday {
-            indexPath.row -= scrollDate.weekday - date.weekday
-        }
-        
-        guard let newMoveDate = days[indexPath.row].date else { return }
-        
-        date = newMoveDate
-        delegate?.didSelectDateScrollHeader(newMoveDate, type: type)
-        setDateToTitle(newMoveDate)
+//        guard var indexPath = getMiddleIndexPath(), let scrollDate = days[indexPath.row].date else { return }
+//
+//        if date.isSunday {
+//            switch style.startWeekDay {
+//            case .monday:
+//                indexPath.row += 3
+//            case .sunday:
+//                indexPath.row -= 3
+//            }
+//        } else if date.weekday > scrollDate.weekday {
+//            indexPath.row += date.weekday - scrollDate.weekday
+//        } else if scrollDate.weekday > date.weekday {
+//            indexPath.row -= scrollDate.weekday - date.weekday
+//        }
+//
+//        if indexPath.row < 0{
+//            indexPath.row = 0
+//        }
+//        guard let newMoveDate = days[indexPath.row].date else { return }
+//
+//        date = newMoveDate
+//        delegate?.didSelectDateScrollHeader(newMoveDate, type: type)
+////        setDateToTitle(newMoveDate)
         collectionView.reloadData()
-        
+
         lastContentOffset = scrollView.contentOffset.x
     }
     

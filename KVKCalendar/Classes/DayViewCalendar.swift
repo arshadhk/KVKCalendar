@@ -33,13 +33,13 @@ final class DayViewCalendar: UIView {
         var timelineFrame = frame
         timelineFrame.origin.y = scrollHeaderDay.frame.height
         timelineFrame.size.height -= scrollHeaderDay.frame.height
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            if UIDevice.current.orientation.isPortrait {
-                timelineFrame.size.width = UIScreen.main.bounds.width * 0.5
-            } else {
-                timelineFrame.size.width -= style.timeline.widthEventViewer
-            }
-        }
+//        if UIDevice.current.userInterfaceIdiom == .pad {
+//            if UIDevice.current.orientation.isPortrait {
+//                timelineFrame.size.width = UIScreen.main.bounds.width * 0.5
+//            } else {
+//                timelineFrame.size.width -= style.timeline.widthEventViewer
+//            }
+//        }
         let view = TimelineView(type: .day, timeHourSystem: data.timeSystem, style: style, frame: timelineFrame)
         view.delegate = self
         return view
@@ -73,14 +73,14 @@ final class DayViewCalendar: UIView {
         
         var eventFrame = timelineView.frame
         eventFrame.origin.x = eventFrame.width
-        if UIDevice.current.orientation.isPortrait {
-            eventFrame.size.width = UIScreen.main.bounds.width * 0.5
-        } else {
-            eventFrame.size.width = style.timeline.widthEventViewer
-        }
+//        if UIDevice.current.orientation.isPortrait {
+        eventFrame.size.width = UIScreen.main.bounds.width * 0.5
+//        } else {
+//            eventFrame.size.width = style.timeline.widthEventViewer
+//        }
         view.frame = eventFrame
         view.tag = -1
-        addSubview(view)
+//        addSubview(view)
         delegate?.getEventViewerFrame(eventFrame)
     }
     
@@ -166,31 +166,31 @@ extension DayViewCalendar: CalendarSettingProtocol {
         
         var timelineFrame = timelineView.frame
         timelineFrame.size.height = frame.height - scrollHeaderDay.frame.height
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            timelineFrame.size.width = frame.width - style.timeline.widthEventViewer
-            if let idx = subviews.firstIndex(where: { $0.tag == -1 }) {
-                let eventView = subviews[idx]
-                var eventFrame = timelineFrame
-                
-                let pointX: CGFloat
-                let width: CGFloat
-                if UIDevice.current.orientation.isPortrait {
-                    width = frame.width * 0.5
-                    pointX = frame.width - width
-                    timelineFrame.size.width = frame.width - width
-                } else {
-                    pointX = eventFrame.width
-                    width = style.timeline.widthEventViewer
-                }
-                
-                eventFrame.origin.x = pointX
-                eventFrame.size.width = width
-                eventView.frame = eventFrame
-                delegate?.getEventViewerFrame(eventFrame)
-            }
-        } else {
+//        if UIDevice.current.userInterfaceIdiom == .pad {
+//            timelineFrame.size.width = frame.width - style.timeline.widthEventViewer
+//            if let idx = subviews.firstIndex(where: { $0.tag == -1 }) {
+//                let eventView = subviews[idx]
+//                var eventFrame = timelineFrame
+//
+//                let pointX: CGFloat
+//                let width: CGFloat
+//                if UIDevice.current.orientation.isPortrait {
+//                    width = frame.width * 0.5
+//                    pointX = frame.width - width
+//                    timelineFrame.size.width = frame.width - width
+//                } else {
+//                    pointX = eventFrame.width
+//                    width = style.timeline.widthEventViewer
+//                }
+//
+//                eventFrame.origin.x = pointX
+//                eventFrame.size.width = width
+//                eventView.frame = eventFrame
+//                delegate?.getEventViewerFrame(eventFrame)
+//            }
+//        } else {
             timelineFrame.size.width = frame.width
-        }
+//        }
         timelineView.reloadFrame(timelineFrame)
         timelineView.create(dates: [data.date], events: data.events, selectedDate: data.date)
     }

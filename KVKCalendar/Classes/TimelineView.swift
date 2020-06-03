@@ -48,6 +48,7 @@ final class TimelineView: UIView, CompareEventDateProtocol {
         label.isHidden = true
         let formatter = DateFormatter()
         formatter.dateFormat = timeHourSystem == .twentyFourHour ? "HH:mm" : "h:mm a"
+        formatter.timeZone = TimeZone.ReferenceType.system
         label.text = formatter.string(from: Date())
         label.valueHash = Date().minute.hashValue
         return label
@@ -292,6 +293,12 @@ final class TimelineView: UIView, CompareEventDateProtocol {
             return time.valueHash == hour.hashValue }).first as? TimelineLabel
     }
     
+    private func getCurrentTimelineLabel(hour: Int) -> TimelineLabel? {
+           return scrollView.subviews .filter({ (view) -> Bool in
+               guard let time = view as? TimelineLabel else { return false }
+               return time.tag == hour }).first as? TimelineLabel
+       }
+    
     private func stopTimer() {
         if timer?.isValid ?? true {
             timer?.invalidate()
@@ -322,6 +329,7 @@ final class TimelineView: UIView, CompareEventDateProtocol {
             
             let formatter = DateFormatter()
             formatter.dateFormat = self.timeHourSystem == .twentyFourHour ? "HH:mm" : "h:mm a"
+            formatter.timeZone = TimeZone.ReferenceType.system
             self.currentTimeLabel.text = formatter.string(from: nextDate)
             
             if let timeNext = self.getTimelineLabel(hour: nextDate.hour + 1) {
@@ -401,7 +409,7 @@ final class TimelineView: UIView, CompareEventDateProtocol {
             return
         }
         
-        guard let time = getTimelineLabel(hour: Date().hour), style.timeline.scrollToCurrentHour else {
+        guard let time = getCurrentTimelineLabel(hour: Date().timeHour), style.timeline.scrollToCurrentHour else {
             scrollView.setContentOffset(.zero, animated: true)
             return
         }
@@ -535,7 +543,7 @@ final class TimelineView: UIView, CompareEventDateProtocol {
             }
         }
         setOffsetScrollView()
-//        scrollToCurrentTime(startHour: start)
+        scrollToCurrentTime(startHour: start)
         showCurrentLineHour()
     }
 }
